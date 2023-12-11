@@ -1,6 +1,4 @@
-@_implementationOnly import Then
 import AppKit
-@_implementationOnly import SnapKit
 
 protocol WelcomeViewControllerDelegate: AnyObject {
     func welcomeViewController(_ welcomeViewController: WelcomeViewController, didClickCellAt index: Int)
@@ -57,40 +55,69 @@ final class WelcomeViewController: ViewController {
 
     func setup() {
         view.addSubview(closeButton)
-        closeButton.snp.makeConstraints { make in
-            make.top.left.equalTo(15)
+//        closeButton.snp.makeConstraints { make in
+//            make.top.left.equalTo(15)
+//        }
+        closeButton.makeConstraints { make in
+            make.topAnchor.constraint(equalTo: view.topAnchor, constant: 15)
+            make.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 15)
         }
 
         view.addSubview(appImageView)
-        appImageView.snp.makeConstraints { make in
-            make.top.equalTo(40)
-            make.centerX.equalToSuperview()
-        }
+//        appImageView.snp.makeConstraints { make in
+//            make.top.equalTo(40)
+//            make.centerX.equalToSuperview()
+//        }
 
+        appImageView.makeConstraints { make in
+            make.topAnchor.constraint(equalTo: view.topAnchor, constant: 40)
+            make.centerXAnchor.constraint(equalTo: view.centerXAnchor)
+        }
+        
         view.addSubview(welcomeLabel)
-        welcomeLabel.snp.makeConstraints { make in
-            make.top.equalTo(appImageView.snp.bottom).offset(5)
-            make.centerX.equalToSuperview()
-        }
+//        welcomeLabel.snp.makeConstraints { make in
+//            make.top.equalTo(appImageView.snp.bottom).offset(5)
+//            make.centerX.equalToSuperview()
+//        }
 
+        welcomeLabel.makeConstraints { make in
+            make.topAnchor.constraint(equalTo: appImageView.bottomAnchor, constant: 5)
+            make.centerXAnchor.constraint(equalTo: view.centerXAnchor)
+        }
+        
         view.addSubview(versionLabel)
-        versionLabel.snp.makeConstraints { make in
-            make.top.equalTo(welcomeLabel.snp.bottom).offset(10)
-            make.centerX.equalToSuperview()
-        }
+//        versionLabel.snp.makeConstraints { make in
+//            make.top.equalTo(welcomeLabel.snp.bottom).offset(10)
+//            make.centerX.equalToSuperview()
+//        }
 
+        versionLabel.makeConstraints { make in
+            make.topAnchor.constraint(equalTo: welcomeLabel.bottomAnchor, constant: 10)
+            make.centerXAnchor.constraint(equalTo: view.centerXAnchor)
+        }
         view.addSubview(vStackView)
-        vStackView.snp.makeConstraints { make in
-            make.top.equalTo(versionLabel.snp.bottom).offset(30)
-            make.left.equalTo(56)
-            make.right.equalTo(-56)
-            make.height.equalTo(135)
-        }
+//        vStackView.snp.makeConstraints { make in
+//            make.top.equalTo(versionLabel.snp.bottom).offset(30)
+//            make.left.equalTo(56)
+//            make.right.equalTo(-56)
+//            make.height.equalTo(135)
+//        }
 
+        vStackView.makeConstraints { make in
+            make.topAnchor.constraint(equalTo: versionLabel.bottomAnchor, constant: 30)
+            make.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 56)
+            make.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -56)
+            make.heightAnchor.constraint(equalToConstant: 135)
+        }
         view.addSubview(showOnLaunchCheckbox)
-        showOnLaunchCheckbox.snp.makeConstraints { make in
-            make.left.equalTo(vStackView)
-            make.bottom.equalToSuperview().inset(10)
+//        showOnLaunchCheckbox.snp.makeConstraints { make in
+//            make.left.equalTo(vStackView)
+//            make.bottom.equalToSuperview().inset(10)
+//        }
+        
+        showOnLaunchCheckbox.makeConstraints { make in
+            make.leftAnchor.constraint(equalTo: vStackView.leftAnchor)
+            make.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -10)
         }
     }
 

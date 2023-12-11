@@ -1,7 +1,5 @@
 import AppKit
 
-@_implementationOnly import Then
-
 public protocol WelcomePanelDataSource: AnyObject {
     func numberOfActions(_ welcomePanel: WelcomePanelController) -> Int
     func numberOfProjects(_ welcomePanel: WelcomePanelController) -> Int

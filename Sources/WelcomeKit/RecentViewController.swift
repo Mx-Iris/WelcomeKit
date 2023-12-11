@@ -1,6 +1,4 @@
-@_implementationOnly import Then
 import AppKit
-@_implementationOnly import SnapKit
 
 protocol RecentViewControllerDelegate: AnyObject {
     func recentViewController(_ recentViewController: RecentViewController, didSelectRecentProjectAt index: Int)
@@ -65,8 +63,14 @@ class RecentViewController: ViewController {
         view = visualEffectView
         visualEffectView.frame = .init(x: 500, y: 0, width: 300, height: 460)
         visualEffectView.addSubview(scrollView)
-        scrollView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+//        scrollView.snp.makeConstraints { make in
+//            make.edges.equalToSuperview()
+//        }
+        scrollView.makeConstraints { make in
+            make.topAnchor.constraint(equalTo: view.topAnchor)
+            make.leftAnchor.constraint(equalTo: view.leftAnchor)
+            make.rightAnchor.constraint(equalTo: view.rightAnchor)
+            make.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         }
     }
 

@@ -1,6 +1,4 @@
-@_implementationOnly import Then
 import AppKit
-@_implementationOnly import SnapKit
 
 class RecentProjectCellView: TableCellView {
     let iconImageView = NSImageView()
@@ -22,19 +20,41 @@ class RecentProjectCellView: TableCellView {
         addSubview(iconImageView)
         addSubview(titleLabel)
         addSubview(detailLabel)
-        iconImageView.snp.makeConstraints { make in
-            make.left.centerY.equalToSuperview()
-            make.size.equalTo(32)
+
+//        iconImageView.snp.makeConstraints { make in
+//            make.left.centerY.equalToSuperview()
+//            make.size.equalTo(32)
+//        }
+//        titleLabel.snp.makeConstraints { make in
+//            make.top.equalToSuperview().inset(5)
+//            make.left.equalTo(iconImageView.snp.right).offset(8)
+//            make.right.greaterThanOrEqualToSuperview().offset(10)
+//        }
+//
+//
+//        detailLabel.snp.makeConstraints { make in
+//            make.left.equalTo(titleLabel)
+//            make.bottom.equalToSuperview().inset(5)
+//            make.right.greaterThanOrEqualToSuperview().offset(10)
+//        }
+
+        iconImageView.makeConstraints { make in
+            make.leftAnchor.constraint(equalTo: self.leftAnchor)
+            make.centerYAnchor.constraint(equalTo: self.centerYAnchor)
+            make.widthAnchor.constraint(equalToConstant: 32)
+            make.heightAnchor.constraint(equalToConstant: 32)
         }
-        titleLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview().inset(5)
-            make.left.equalTo(iconImageView.snp.right).offset(8)
-            make.right.greaterThanOrEqualToSuperview().offset(10)
+
+        titleLabel.makeConstraints { make in
+            make.topAnchor.constraint(equalTo: topAnchor, constant: 5)
+            make.leftAnchor.constraint(equalTo: iconImageView.rightAnchor, constant: 8)
+            make.rightAnchor.constraint(greaterThanOrEqualTo: rightAnchor, constant: 10)
         }
-        detailLabel.snp.makeConstraints { make in
-            make.left.equalTo(titleLabel)
-            make.bottom.equalToSuperview().inset(5)
-            make.right.greaterThanOrEqualToSuperview().offset(10)
+
+        detailLabel.makeConstraints { make in
+            make.leftAnchor.constraint(equalTo: titleLabel.leftAnchor)
+            make.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -5)
+            make.rightAnchor.constraint(greaterThanOrEqualTo: rightAnchor, constant: 10)
         }
 
         titleLabel.do {
@@ -44,5 +64,16 @@ class RecentProjectCellView: TableCellView {
         detailLabel.do {
             $0.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         }
+    }
+}
+
+extension NSView: ConstraintMaker {}
+
+protocol ConstraintMaker: NSView {}
+
+extension ConstraintMaker {
+    func makeConstraints(@ArrayBuilder<NSLayoutConstraint> _ constraintsBuilder: (_ make: Self) -> [NSLayoutConstraint]) {
+        translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate(constraintsBuilder(self))
     }
 }

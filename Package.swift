@@ -14,15 +14,11 @@ let package = Package(
         ),
     ],
     dependencies: [
-        .package(url: "https://github.com/SnapKit/SnapKit", .upToNextMajor(from: "5.0.0")),
-        .package(url: "https://github.com/devxoul/Then", branch: "master")
     ],
     targets: [
         .target(
             name: "WelcomeKit",
             dependencies: [
-                "SnapKit",
-                "Then"
             ],
             resources: [
                 .process("Resources")
