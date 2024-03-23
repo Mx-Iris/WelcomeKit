@@ -1,17 +1,69 @@
 import AppKit
 
 public protocol WelcomePanelDataSource: AnyObject {
-    func numberOfActions(_ welcomePanel: WelcomePanelController) -> Int
-    func numberOfProjects(_ welcomePanel: WelcomePanelController) -> Int
-    func welcomePanel(_ welcomePanel: WelcomePanelController, urlForRecentTableViewAt index: Int) -> URL
-    func welcomePanel(_ welcomePanel: WelcomePanelController, modelForWelcomeActionViewAt index: Int) -> WelcomeActionModel
+    func welcomePanelUsesRecentDocumentURLs(_ welcomePanel: WelcomePanelController) -> Bool
+    func numberOfProjects(in welcomePanel: WelcomePanelController) -> Int
+    func welcomePanel(_ welcomePanel: WelcomePanelController, urlForProjectAtIndex index: Int) -> URL
 }
 
 public protocol WelcomePanelDelegate: AnyObject {
-    func welcomePanel(_ welcomePanel: WelcomePanelController, didClickActionAt index: Int)
     func welcomePanel(_ welcomePanel: WelcomePanelController, didCheckShowPanelWhenLaunch isCheck: Bool)
-    func welcomePanel(_ welcomePanel: WelcomePanelController, didSelectRecentProjectAt index: Int)
-    func welcomePanel(_ welcomePanel: WelcomePanelController, didDoubleClickRecentProjectAt index: Int)
+    func welcomePanel(_ welcomePanel: WelcomePanelController, didSelectProjectAtIndex index: Int)
+    func welcomePanel(_ welcomePanel: WelcomePanelController, didDoubleClickProjectAtIndex index: Int)
+}
+
+public struct WelcomeConfiguration {
+    public var welcomeLabelText: String?
+    public var welcomeLabelFont: NSFont?
+    public var welcomeLabelColor: NSColor?
+    public var versionLabelText: String?
+    public var versionLabelFont: NSFont?
+    public var versionLabelColor: NSColor?
+    public var appIconImage: NSImage?
+    public var primaryAction: WelcomeAction?
+    public var secondaryAction: WelcomeAction?
+    public var tertiaryAction: WelcomeAction?
+    
+    var allActions: [WelcomeAction] {
+        [primaryAction, secondaryAction, tertiaryAction].compactMap { $0 }
+    }
+    
+    public init(welcomeLabelText: String? = nil, welcomeLabelFont: NSFont? = nil, welcomeLabelColor: NSColor? = nil, versionLabelText: String? = nil, versionLabelFont: NSFont? = nil, versionLabelColor: NSColor? = nil, appIconImage: NSImage? = nil, primaryAction: WelcomeAction? = nil, secondaryAction: WelcomeAction? = nil, tertiaryAction: WelcomeAction? = nil) {
+        self.welcomeLabelText = welcomeLabelText
+        self.welcomeLabelFont = welcomeLabelFont
+        self.welcomeLabelColor = welcomeLabelColor
+        self.versionLabelText = versionLabelText
+        self.versionLabelFont = versionLabelFont
+        self.versionLabelColor = versionLabelColor
+        self.appIconImage = appIconImage
+        self.primaryAction = primaryAction
+        self.secondaryAction = secondaryAction
+        self.tertiaryAction = tertiaryAction
+    }
+}
+
+public struct WelcomeAction {
+    public var image: NSImage?
+    public var imageTintColor: NSColor?
+    public var title: String?
+    public var titleColor: NSColor?
+    public var titleFont: NSFont?
+    public var subtitle: String?
+    public var subtitleColor: NSColor?
+    public var subtitleFont: NSFont?
+    public var action: ((Self) -> Void)?
+
+    public init(image: NSImage? = nil, imageTintColor: NSColor? = nil, title: String? = nil, titleColor: NSColor? = nil, titleFont: NSFont? = nil, subtitle: String? = nil, subtitleColor: NSColor? = nil, subtitleFont: NSFont? = nil, action: ( (Self) -> Void)? = nil) {
+        self.image = image
+        self.imageTintColor = imageTintColor
+        self.title = title
+        self.titleColor = titleColor
+        self.titleFont = titleFont
+        self.subtitle = subtitle
+        self.subtitleColor = subtitleColor
+        self.subtitleFont = subtitleFont
+        self.action = action
+    }
 }
 
 public final class WelcomePanelController: NSWindowController {
@@ -23,6 +75,12 @@ public final class WelcomePanelController: NSWindowController {
 
     public weak var delegate: WelcomePanelDelegate?
 
+    public var configuration: WelcomeConfiguration {
+        didSet {
+            welcomeViewController.configuration = configuration
+        }
+    }
+    
     public var welcomeLabelText: String? {
         didSet {
             guard let welcomeLabelText else { return }
@@ -43,15 +101,13 @@ public final class WelcomePanelController: NSWindowController {
         }
     }
 
-    private lazy var welcomeViewController = WelcomeViewController().then {
-        $0.delegate = self
-    }
+    private lazy var welcomeViewController = WelcomeViewController()
 
-    private lazy var recentViewController = RecentViewController().then {
-        $0.delegate = self
-    }
+    private lazy var projectsViewController = ProjectsViewController()
 
-    public init() {
+    public init(configuration: WelcomeConfiguration = .init()) {
+        self.configuration = configuration
+        
         let contentViewController = ViewController().then {
             $0.view.frame = .init(x: 0, y: 0, width: 800, height: 460)
         }
@@ -65,9 +121,17 @@ public final class WelcomePanelController: NSWindowController {
         super.init(window: window)
         contentViewController.do {
             $0.view.addSubview(welcomeViewController.view)
-            $0.view.addSubview(recentViewController.view)
+            $0.view.addSubview(projectsViewController.view)
             $0.addChild(welcomeViewController)
-            $0.addChild(recentViewController)
+            $0.addChild(projectsViewController)
+        }
+        projectsViewController.didSelect = { [weak self] index in
+            guard let self else { return }
+            delegate?.welcomePanel(self, didSelectProjectAtIndex: index)
+        }
+        projectsViewController.didDoubleClick = { [weak self] index in
+            guard let self else { return }
+            delegate?.welcomePanel(self, didDoubleClickProjectAtIndex: index)
         }
     }
 
@@ -77,43 +141,22 @@ public final class WelcomePanelController: NSWindowController {
     }
 
     public func reloadData() {
-        guard let dataSource = dataSource else { return }
+        guard let dataSource else { return }
 
-        var maxActionCellCount = dataSource.numberOfActions(self)
-        if maxActionCellCount > 3, maxActionCellCount < 0 {
-            maxActionCellCount = 3
+        if dataSource.welcomePanelUsesRecentDocumentURLs(self) {
+            projectsViewController.usesRecentDocumentURLs = true
+        } else {
+            var numberOfProjects = dataSource.numberOfProjects(in: self)
+            if numberOfProjects < 0 {
+                numberOfProjects = 0
+            }
+            let projectURLs = (0 ..< numberOfProjects).map {
+                dataSource.welcomePanel(self, urlForProjectAtIndex: $0)
+            }
+            projectsViewController.usesRecentDocumentURLs = false
+            projectsViewController.recentProjectURLs = projectURLs
         }
-        let actionModels = (0 ..< maxActionCellCount).map {
-            dataSource.welcomePanel(self, modelForWelcomeActionViewAt: $0)
-        }
-        var numberOfProjects = dataSource.numberOfProjects(self)
-        if numberOfProjects < 0 {
-            numberOfProjects = 0
-        }
-        let projectURLs = (0 ..< numberOfProjects).map {
-            dataSource.welcomePanel(self, urlForRecentTableViewAt: $0)
-        }
-        welcomeViewController.reloadData(for: actionModels)
-        recentViewController.reloadData(for: projectURLs)
-    }
-}
-
-extension WelcomePanelController: WelcomeViewControllerDelegate {
-    func welcomeViewController(_ welcomeViewController: WelcomeViewController, didCheckShowWhenLaunch isCheck: Bool) {
-        delegate?.welcomePanel(self, didCheckShowPanelWhenLaunch: isCheck)
-    }
-
-    func welcomeViewController(_ welcomeViewController: WelcomeViewController, didClickCellAt index: Int) {
-        delegate?.welcomePanel(self, didClickActionAt: index)
-    }
-}
-
-extension WelcomePanelController: RecentViewControllerDelegate {
-    func recentViewController(_ recentViewController: RecentViewController, didSelectRecentProjectAt index: Int) {
-        delegate?.welcomePanel(self, didSelectRecentProjectAt: index)
-    }
-
-    func recentViewController(_ recentViewController: RecentViewController, didDoblueClickRecentProjectAt index: Int) {
-        delegate?.welcomePanel(self, didDoubleClickRecentProjectAt: index)
+        welcomeViewController.reloadData()
+        projectsViewController.reloadData()
     }
 }

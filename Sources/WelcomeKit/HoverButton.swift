@@ -11,6 +11,7 @@ class HoverButton: NSButton {
     
     /// Image used when hovering over
     @IBInspectable var hoveringImage: NSImage?
+    
     @IBInspectable var notHoveringImage: NSImage? {
         didSet {
             image = notHoveringImage
