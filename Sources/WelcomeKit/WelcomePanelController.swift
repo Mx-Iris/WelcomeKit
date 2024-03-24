@@ -47,30 +47,44 @@ public final class WelcomePanelController: NSWindowController {
         }
     }
 
+    private lazy var contentWindow = NSWindow(contentRect: .init(x: 0, y: 0, width: 802, height: 460), styleMask: [.titled, .fullSizeContentView], backing: .buffered, defer: true).then {
+        $0.titlebarAppearsTransparent = true
+        $0.titleVisibility = .hidden
+        $0.center()
+        $0.isMovableByWindowBackground = true
+        $0.delegate = self
+    }
+
     private lazy var welcomeViewController = WelcomeViewController()
 
     private lazy var projectsViewController = ProjectsViewController()
 
     public init(configuration: WelcomeConfiguration = .init()) {
         self.configuration = configuration
+        super.init(window: nil)
+    }
+
+    public override var windowNibName: NSNib.Name? { "" }
+
+    public override func loadWindow() {
+        window = contentWindow
+    }
+
+    public override func windowDidLoad() {
+        super.windowDidLoad()
 
         let contentViewController = ViewController().then {
             $0.view.frame = .init(x: 0, y: 0, width: 800, height: 460)
         }
-        let window = NSWindow(contentViewController: contentViewController).then {
-            $0.titlebarAppearsTransparent = true
-            $0.styleMask = [.titled, .fullSizeContentView]
-            $0.titleVisibility = .hidden
-            $0.center()
-            $0.isMovableByWindowBackground = true
-        }
-        super.init(window: window)
+
         contentViewController.do {
             $0.view.addSubview(welcomeViewController.view)
             $0.view.addSubview(projectsViewController.view)
             $0.addChild(welcomeViewController)
             $0.addChild(projectsViewController)
         }
+
+        self.contentViewController = contentViewController
 
         welcomeViewController.view.makeConstraints { make in
             make.topAnchor.constraint(equalTo: contentViewController.view.topAnchor)
@@ -119,5 +133,13 @@ public final class WelcomePanelController: NSWindowController {
         }
         welcomeViewController.reloadData()
         projectsViewController.reloadData()
+    }
+}
+
+extension WelcomePanelController: NSWindowDelegate {
+    public func windowDidChangeOcclusionState(_ notification: Notification) {
+        if contentWindow.occlusionState.contains(.visible) {
+            reloadData()
+        }
     }
 }
