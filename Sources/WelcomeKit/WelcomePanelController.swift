@@ -100,6 +100,11 @@ public final class WelcomePanelController: NSWindowController {
             make.rightAnchor.constraint(equalTo: contentViewController.view.rightAnchor)
         }
 
+        welcomeViewController.didCheckShowOnLaunchCheckbox = { [weak self] button in
+            guard let self else { return }
+            delegate?.welcomePanel(self, didCheckShowPanelWhenLaunch: button.state == .on)
+        }
+        
         projectsViewController.didSelect = { [weak self] index in
             guard let self else { return }
             delegate?.welcomePanel(self, didSelectProjectAtIndex: index)

@@ -25,6 +25,9 @@ final class WelcomeViewController: ViewController {
         $0.focusRingType = .none
     }
 
+    
+    var didCheckShowOnLaunchCheckbox: (NSButton) -> Void = { _ in }
+    
     lazy var showOnLaunchCheckbox: NSButton = .init(checkboxWithTitle: "Show this window when \(Bundle.main.appName) launches", target: self, action: #selector(showOnLaunchCheckboxAction(_:))).then {
         $0.font = .systemFont(ofSize: 13, weight: .regular)
         $0.state = .on
@@ -119,7 +122,7 @@ final class WelcomeViewController: ViewController {
     }
 
     @objc func showOnLaunchCheckboxAction(_ sender: NSButton) {
-//        delegate?.welcomeViewController(self, didCheckShowWhenLaunch: sender.state == .on ? true : false)
+        didCheckShowOnLaunchCheckbox(sender)
     }
 
     @objc func closeButtonAction(_ sender: NSButton) {
