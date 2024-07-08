@@ -25,9 +25,8 @@ final class WelcomeViewController: ViewController {
         $0.focusRingType = .none
     }
 
-    
     var didCheckShowOnLaunchCheckbox: (NSButton) -> Void = { _ in }
-    
+
     lazy var showOnLaunchCheckbox: NSButton = .init(checkboxWithTitle: "Show this window when \(Bundle.main.appName) launches", target: self, action: #selector(showOnLaunchCheckboxAction(_:))).then {
         $0.font = .systemFont(ofSize: 13, weight: .regular)
         $0.state = .on
@@ -62,6 +61,7 @@ final class WelcomeViewController: ViewController {
         view.addSubview(versionLabel)
         view.addSubview(actionTableView)
         view.addSubview(showOnLaunchCheckbox)
+        
         closeButton.makeConstraints { make in
             make.topAnchor.constraint(equalTo: view.topAnchor, constant: 12)
             make.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 12)
@@ -106,9 +106,11 @@ final class WelcomeViewController: ViewController {
             $0.textColor = configuration.versionLabelColor ?? .secondaryLabelColor
             $0.font = configuration.versionLabelFont ?? .systemFont(ofSize: 13, weight: .light)
         }
+        showOnLaunchCheckbox.state = configuration.checkShowOnLaunch ? .on : .off
         appImageView.image = configuration.appIconImage ?? NSApplication.shared.applicationIconImage
         actionTableView.reloadData()
         actionTableView.sizeToFit()
+        
     }
 
     override func mouseEntered(with event: NSEvent) {

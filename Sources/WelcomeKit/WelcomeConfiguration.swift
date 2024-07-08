@@ -13,12 +13,25 @@ public struct WelcomeConfiguration {
     public var primaryAction: WelcomeAction?
     public var secondaryAction: WelcomeAction?
     public var tertiaryAction: WelcomeAction?
+    public var checkShowOnLaunch: Bool
     
-    var allActions: [WelcomeAction] {
+    public var allActions: [WelcomeAction] {
         [primaryAction, secondaryAction, tertiaryAction].compactMap { $0 }
     }
     
-    public init(welcomeLabelText: String? = nil, welcomeLabelFont: NSFont? = nil, welcomeLabelColor: NSColor? = nil, versionLabelText: String? = nil, versionLabelFont: NSFont? = nil, versionLabelColor: NSColor? = nil, appIconImage: NSImage? = nil, primaryAction: WelcomeAction? = nil, secondaryAction: WelcomeAction? = nil, tertiaryAction: WelcomeAction? = nil) {
+    public init(
+        welcomeLabelText: String? = nil,
+        welcomeLabelFont: NSFont? = nil,
+        welcomeLabelColor: NSColor? = nil,
+        versionLabelText: String? = nil,
+        versionLabelFont: NSFont? = nil,
+        versionLabelColor: NSColor? = nil,
+        appIconImage: NSImage? = nil,
+        primaryAction: WelcomeAction? = nil,
+        secondaryAction: WelcomeAction? = nil,
+        tertiaryAction: WelcomeAction? = nil,
+        checkShowOnLaunch: Bool = true
+    ) {
         self.welcomeLabelText = welcomeLabelText
         self.welcomeLabelFont = welcomeLabelFont
         self.welcomeLabelColor = welcomeLabelColor
@@ -29,6 +42,7 @@ public struct WelcomeConfiguration {
         self.primaryAction = primaryAction
         self.secondaryAction = secondaryAction
         self.tertiaryAction = tertiaryAction
+        self.checkShowOnLaunch = checkShowOnLaunch
     }
 }
 
