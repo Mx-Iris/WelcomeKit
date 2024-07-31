@@ -35,6 +35,12 @@ class ProjectsViewController: ViewController {
             $0.addItem(withTitle: "Show in Finder", action: #selector(showInFinderAction(_:)), keyEquivalent: "")
         }
     }
+    
+    lazy var placeholderLabel = NSTextField(labelWithString: "No Recent Projects").then {
+        $0.font = .systemFont(ofSize: 16.5)
+        $0.textColor = .selectedTextColor
+        $0.isHidden = true
+    }
 
     @objc func showInFinderAction(_ sender: NSMenuItem) {
         let selectedRow = tableView.selectedRow
@@ -50,6 +56,11 @@ class ProjectsViewController: ViewController {
         super.viewDidLoad()
         tableView.dataSource = self
         tableView.delegate = self
+        tableView.addSubview(placeholderLabel)
+        placeholderLabel.makeConstraints { make in
+            make.centerXAnchor.constraint(equalTo: tableView.centerXAnchor)
+            make.centerYAnchor.constraint(equalTo: tableView.centerYAnchor)
+        }
     }
 
     @objc func onDoubleClick() {
@@ -58,6 +69,7 @@ class ProjectsViewController: ViewController {
 
     func reloadData() {
         tableView.reloadData()
+        placeholderLabel.isHidden = tableView.numberOfRows != 0
     }
 }
 
