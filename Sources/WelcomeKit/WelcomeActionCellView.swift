@@ -1,10 +1,8 @@
 import AppKit
 
 class WelcomeActionCellView: TableCellView {
-    let iconImageView = NSImageView().then {
-        $0.imageScaling = .scaleProportionallyUpOrDown
-    }
-
+    let iconImageView = NSImageView()
+    
     let titleLabel = NSTextField(labelWithString: "")
 
     let detailLabel = NSTextField(labelWithString: "")
