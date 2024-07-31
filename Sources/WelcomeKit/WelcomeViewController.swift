@@ -86,7 +86,7 @@ final class WelcomeViewController: ViewController {
             make.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 54)
             make.rightAnchor.constraint(equalTo: view.rightAnchor)
             make.heightAnchor.constraint(equalToConstant: 138)
-            make.bottomAnchor.constraint(equalTo: showOnLaunchCheckbox.topAnchor, constant: -30)
+            make.bottomAnchor.constraint(equalTo: showOnLaunchCheckbox.topAnchor, constant: -40)
         }
 
         showOnLaunchCheckbox.makeConstraints { make in
