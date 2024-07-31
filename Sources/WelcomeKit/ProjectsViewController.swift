@@ -38,7 +38,7 @@ class ProjectsViewController: ViewController {
     
     lazy var placeholderLabel = NSTextField(labelWithString: "No Recent Projects").then {
         $0.font = .systemFont(ofSize: 16.5)
-        $0.textColor = .selectedTextColor
+        $0.textColor = .secondaryLabelColor
         $0.isHidden = true
     }
 
@@ -68,8 +68,8 @@ class ProjectsViewController: ViewController {
     }
 
     func reloadData() {
+        placeholderLabel.isHidden = !urls.isEmpty
         tableView.reloadData()
-        placeholderLabel.isHidden = tableView.numberOfRows != 0
     }
 }
 
