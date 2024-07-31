@@ -139,6 +139,11 @@ public final class WelcomePanelController: NSWindowController {
         welcomeViewController.reloadData()
         projectsViewController.reloadData()
     }
+    
+    public override func showWindow(_ sender: Any?) {
+        reloadData()
+        super.showWindow(sender)
+    }
 }
 
 extension WelcomePanelController: NSWindowDelegate {
