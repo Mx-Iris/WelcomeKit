@@ -9,9 +9,11 @@ extension NSTableView {
         } else {
             let cellView = CellView()
             cellView.identifier = .init(String(describing: CellView.self))
-            return CellView()
+            return cellView
         }
     }
 }
+
+
 
 #endif
