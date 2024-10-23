@@ -1,12 +1,21 @@
 import AppKit
 
 extension NSView {
-    public var edgesAnchor: NSLayoutEdgesAnchor {
+    var edgesAnchor: NSLayoutEdgesAnchor {
         .init(leadingAnchor: leadingAnchor, trailingAnchor: trailingAnchor, topAnchor: topAnchor, bottomAnchor: bottomAnchor)
     }
 }
 
-public final class NSLayoutEdgesAnchor: NSObject {
+extension [NSLayoutConstraint] {
+    func active() {
+        for constraint in self {
+            constraint.isActive = true
+        }
+    }
+}
+
+
+final class NSLayoutEdgesAnchor: NSObject {
     private let leadingAnchor: NSLayoutXAxisAnchor
 
     private let trailingAnchor: NSLayoutXAxisAnchor

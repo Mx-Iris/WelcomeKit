@@ -1,6 +1,28 @@
 import AppKit
 
 class View: NSView {
+    var backgroundColor: NSColor? {
+        didSet {
+            needsDisplay = true
+        }
+    }
+
+    var cornerRadius: CGFloat = 0 {
+        didSet {
+            needsDisplay = true
+        }
+    }
+
+    override var wantsUpdateLayer: Bool { true }
+
+    override func updateLayer() {
+        super.updateLayer()
+
+        layer?.backgroundColor = backgroundColor?.cgColor
+        layer?.cornerRadius = cornerRadius
+        layer?.masksToBounds = cornerRadius != 0
+    }
+
     override init(frame frameRect: NSRect) {
         super.init(frame: frameRect)
         wantsLayer = true
@@ -13,6 +35,8 @@ class View: NSView {
 }
 
 class ViewController: NSViewController {
+    lazy var contentView = View()
+
     init() {
         super.init(nibName: nil, bundle: nil)
     }
@@ -23,7 +47,7 @@ class ViewController: NSViewController {
     }
 
     override func loadView() {
-        view = View()
+        view = contentView
     }
 }
 
@@ -37,7 +61,6 @@ class TableCellView: NSTableCellView {
         fatalError("init(coder:) has not been implemented")
     }
 }
-
 
 class TrackView: View {
     var shouldTrackMouseEnteredAndExited: Bool { true }

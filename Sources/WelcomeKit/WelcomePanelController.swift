@@ -1,16 +1,24 @@
 import AppKit
-
+/* WelcomePanelDataSource */
 public protocol WelcomePanelDataSource: AnyObject {
     func welcomePanelUsesRecentDocumentURLs(_ welcomePanel: WelcomePanelController) -> Bool
     func numberOfProjects(in welcomePanel: WelcomePanelController) -> Int
     func welcomePanel(_ welcomePanel: WelcomePanelController, urlForProjectAtIndex index: Int) -> URL
 }
-
+/* WelcomePanelDelegate */
 public protocol WelcomePanelDelegate: AnyObject {
     func welcomePanel(_ welcomePanel: WelcomePanelController, didCheckShowPanelWhenLaunch isCheck: Bool)
     func welcomePanel(_ welcomePanel: WelcomePanelController, didSelectProjectAtIndex index: Int)
     func welcomePanel(_ welcomePanel: WelcomePanelController, didDoubleClickProjectAtIndex index: Int)
 }
+/* WelcomePanelController */
+
+final class WelcomeWindow: NSWindow {
+    override var canBecomeKey: Bool {
+        true
+    }
+}
+
 
 public final class WelcomePanelController: NSWindowController {
     public weak var dataSource: WelcomePanelDataSource? {
@@ -21,33 +29,9 @@ public final class WelcomePanelController: NSWindowController {
 
     public weak var delegate: WelcomePanelDelegate?
 
-    public var configuration: WelcomeConfiguration {
-        didSet {
-            welcomeViewController.configuration = configuration
-        }
-    }
+    public let configuration: WelcomeConfiguration
 
-    public var welcomeLabelText: String? {
-        didSet {
-            guard let welcomeLabelText else { return }
-            welcomeViewController.welcomeLabel.stringValue = welcomeLabelText
-        }
-    }
-
-    public var versionLabelText: String? {
-        didSet {
-            guard let versionLabelText else { return }
-            welcomeViewController.versionLabel.stringValue = versionLabelText
-        }
-    }
-
-    public var appIconImage: NSImage? {
-        didSet {
-            welcomeViewController.appImageView.image = appIconImage
-        }
-    }
-
-    private lazy var contentWindow = NSWindow(contentRect: .init(x: 0, y: 0, width: 802, height: 460), styleMask: [.titled, .fullSizeContentView], backing: .buffered, defer: true).then {
+    private lazy var contentWindow = WelcomeWindow(contentRect: configuration.style.windowRect, styleMask: [.titled, .fullSizeContentView], backing: .buffered, defer: true).then {
         $0.titlebarAppearsTransparent = true
         $0.titleVisibility = .hidden
         $0.center()
@@ -55,10 +39,20 @@ public final class WelcomePanelController: NSWindowController {
         $0.delegate = self
     }
 
-    private lazy var welcomeViewController = WelcomeViewController()
+    private lazy var welcomeViewController = WelcomeViewController(configuration: configuration)
 
     private lazy var projectsViewController = ProjectsViewController()
 
+    @available(*, unavailable)
+    public override var window: NSWindow? {
+        set {
+            super.window = newValue
+        }
+        get {
+            super.window
+        }
+    }
+    
     public init(configuration: WelcomeConfiguration = .init()) {
         self.configuration = configuration
         super.init(window: nil)
@@ -67,14 +61,21 @@ public final class WelcomePanelController: NSWindowController {
     public override var windowNibName: NSNib.Name? { "" }
 
     public override func loadWindow() {
-        window = contentWindow
+        super.window = contentWindow
     }
 
     public override func windowDidLoad() {
         super.windowDidLoad()
 
+        contentWindow.styleMask = configuration.style.windowStyleMask
+        
+        if configuration.style == .xcode15 {
+            contentWindow.backgroundColor = .clear
+        }
+        
         let contentViewController = ViewController().then {
-            $0.view.frame = .init(x: 0, y: 0, width: 800, height: 460)
+            $0.contentView.frame = configuration.style.windowRect
+            $0.contentView.cornerRadius = configuration.style.windowCornerRadius
         }
 
         contentViewController.do {
@@ -94,7 +95,7 @@ public final class WelcomePanelController: NSWindowController {
         }
 
         projectsViewController.view.makeConstraints { make in
-            make.widthAnchor.constraint(equalToConstant: 307)
+            make.widthAnchor.constraint(equalToConstant: configuration.style.projectViewWidth)
             make.topAnchor.constraint(equalTo: contentViewController.view.topAnchor)
             make.bottomAnchor.constraint(equalTo: contentViewController.view.bottomAnchor)
             make.rightAnchor.constraint(equalTo: contentViewController.view.rightAnchor)
@@ -109,6 +110,7 @@ public final class WelcomePanelController: NSWindowController {
             guard let self else { return }
             delegate?.welcomePanel(self, didSelectProjectAtIndex: index)
         }
+        
         projectsViewController.didDoubleClick = { [weak self] index in
             guard let self else { return }
             delegate?.welcomePanel(self, didDoubleClickProjectAtIndex: index)
