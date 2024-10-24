@@ -8,8 +8,6 @@ extension NSAppearance {
     }
 }
 
-
-
 final class WelcomeViewController: ViewController {
     let configuration: WelcomeConfiguration
 
@@ -23,7 +21,7 @@ final class WelcomeViewController: ViewController {
         $0.documentView = actionTableView
         $0.drawsBackground = false
     }
-    
+
     lazy var actionTableView: TableView = .init().then {
         $0.rowHeight = configuration.style.actionTableViewCellHeight
         $0.intercellSpacing = .init(width: 0, height: configuration.style.actionTableViewSpacing)
@@ -33,8 +31,8 @@ final class WelcomeViewController: ViewController {
         $0.headerView = nil
         $0.dataSource = self
         $0.delegate = self
-        $0.target = self
-        $0.action = #selector(actionTableViewDidClick(_:))
+//        $0.target = self
+//        $0.action = #selector(actionTableViewDidClick(_:))
         $0.focusRingType = .none
         $0.allowsTypeSelect = false
     }
@@ -60,19 +58,19 @@ final class WelcomeViewController: ViewController {
         $0.isEmphasized = false
         $0.state = .followsWindowActiveState
     }
-    
+
     init(configuration: WelcomeConfiguration) {
         self.configuration = configuration
         super.init()
     }
-    
+
     override func loadView() {
         switch configuration.style {
         case .xcode14:
             contentView.backgroundColor = configuration.style.welcomeViewBackgroundColor
-            self.view = contentView
+            view = contentView
         case .xcode15:
-            self.view = visualEffectView
+            view = visualEffectView
             contentView.backgroundColor = configuration.style.welcomeViewBackgroundColor
             visualEffectView.addSubview(contentView, fill: true)
         }
@@ -83,7 +81,7 @@ final class WelcomeViewController: ViewController {
         setup()
         reloadData()
     }
-    
+
     var effectView: NSView {
         switch configuration.style {
         case .xcode14:
@@ -103,7 +101,7 @@ final class WelcomeViewController: ViewController {
             effectView.addSubview(showOnLaunchCheckbox)
         }
         view.addTrackingArea(NSTrackingArea(rect: .zero, options: [.mouseEnteredAndExited, .activeAlways, .inVisibleRect], owner: self, userInfo: nil))
-        
+
         closeButton.makeConstraints { make in
             make.topAnchor.constraint(equalTo: effectView.topAnchor, constant: 12)
             make.leftAnchor.constraint(equalTo: effectView.leftAnchor, constant: 12)
@@ -129,7 +127,7 @@ final class WelcomeViewController: ViewController {
         }
 
         scrollView.makeConstraints { make in
-            
+
             if configuration.style == .xcode14 {
                 make.bottomAnchor.constraint(equalTo: showOnLaunchCheckbox.topAnchor, constant: -40)
                 make.leftAnchor.constraint(equalTo: effectView.leftAnchor, constant: 54)
@@ -191,13 +189,13 @@ final class WelcomeViewController: ViewController {
         view.window?.close()
     }
 
-    @objc func actionTableViewDidClick(_ sender: NSTableView) {
-        let clickedRow = sender.clickedRow
-        let allActions = configuration.allActions
-        guard clickedRow >= 0, clickedRow < allActions.count else { return }
-        let action = allActions[clickedRow]
-        action.action?(action)
-    }
+//    @objc func actionTableViewDidClick(_ sender: NSTableView) {
+//        let clickedRow = sender.clickedRow
+//        let allActions = configuration.allActions
+//        guard clickedRow >= 0, clickedRow < allActions.count else { return }
+//        let action = allActions[clickedRow]
+//        action.action?(action)
+//    }
 }
 
 class TableView: NSTableView {
@@ -205,6 +203,7 @@ class TableView: NSTableView {
         super.mouseDown(with: event)
         print(#function)
     }
+
     override func mouseUp(with event: NSEvent) {
         super.mouseUp(with: event)
         print(#function)
@@ -226,6 +225,10 @@ extension WelcomeViewController: NSTableViewDataSource, NSTableViewDelegate {
             cell = cellView
         }
         let action = configuration.allActions[row]
+
+        cell.didClick = {
+            action.action?(action)
+        }
 
         cell.iconImageView.do {
             $0.image = action.image
