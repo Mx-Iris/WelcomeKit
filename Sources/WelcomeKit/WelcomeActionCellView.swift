@@ -7,16 +7,10 @@ class WelcomeActionCellView: TableCellView {
 
     lazy var detailLabel = NSTextField(labelWithString: "")
 
+    lazy var backgroundView = WelcomeActionCellBackgroundView()
+
     let style: WelcomeStyle
 
-    let normalBackgroundColor = NSColor(name: "WelcomeActionCellView.normalBackgroundColor") {
-        $0.isDark ? .white.withAlphaComponent(0.03) : .black.withAlphaComponent(0.05)
-    }
-    
-    let highlightBackgroundColor = NSColor(name: "WelcomeActionCellView.highlightBackgroundColor") {
-        $0.isDark ? .white.withAlphaComponent(0.05) : .black.withAlphaComponent(0.08)
-    }
-    
     init(style: WelcomeStyle) {
         self.style = style
         super.init(frame: .zero)
@@ -59,11 +53,9 @@ class WelcomeActionCellView: TableCellView {
             }
 
         case .xcode15:
-            addSubview(iconImageView)
-            addSubview(titleLabel)
-
-            cornerRadius = 8
-            backgroundColor = normalBackgroundColor
+            addSubview(backgroundView, fill: true)
+            backgroundView.addSubview(iconImageView)
+            backgroundView.addSubview(titleLabel)
 
             iconImageView.makeConstraints { make in
                 make.leftAnchor.constraint(equalTo: leftAnchor, constant: 11.5)
@@ -82,16 +74,30 @@ class WelcomeActionCellView: TableCellView {
             }
         }
     }
-    
+}
+
+class WelcomeActionCellBackgroundView: View {
+    override init(frame frameRect: NSRect) {
+        super.init(frame: frameRect)
+        cornerRadius = 8
+        backgroundColor = normalBackgroundColor
+    }
+
+    let normalBackgroundColor = NSColor(name: "WelcomeActionCellView.normalBackgroundColor") {
+        $0.isDark ? .white.withAlphaComponent(0.03) : .black.withAlphaComponent(0.05)
+    }
+
+    let highlightBackgroundColor = NSColor(name: "WelcomeActionCellView.highlightBackgroundColor") {
+        $0.isDark ? .white.withAlphaComponent(0.05) : .black.withAlphaComponent(0.08)
+    }
+
     override func mouseDown(with event: NSEvent) {
-        if style == .xcode15 {
-            backgroundColor = highlightBackgroundColor
-        }
+        super.mouseDown(with: event)
+//        backgroundColor = highlightBackgroundColor
     }
 
     override func mouseUp(with event: NSEvent) {
-        if style == .xcode15 {
-            backgroundColor = normalBackgroundColor
-        }
+        super.mouseUp(with: event)
+//        backgroundColor = normalBackgroundColor
     }
 }

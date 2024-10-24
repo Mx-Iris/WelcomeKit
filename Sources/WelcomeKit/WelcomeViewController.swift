@@ -24,7 +24,7 @@ final class WelcomeViewController: ViewController {
         $0.drawsBackground = false
     }
     
-    lazy var actionTableView: NSTableView = .init().then {
+    lazy var actionTableView: TableView = .init().then {
         $0.rowHeight = configuration.style.actionTableViewCellHeight
         $0.intercellSpacing = .init(width: 0, height: configuration.style.actionTableViewSpacing)
         $0.style = .plain
@@ -33,8 +33,10 @@ final class WelcomeViewController: ViewController {
         $0.headerView = nil
         $0.dataSource = self
         $0.delegate = self
+        $0.target = self
         $0.action = #selector(actionTableViewDidClick(_:))
         $0.focusRingType = .none
+        $0.allowsTypeSelect = false
     }
 
     var didCheckShowOnLaunchCheckbox: (NSButton) -> Void = { _ in }
@@ -195,6 +197,17 @@ final class WelcomeViewController: ViewController {
         guard clickedRow >= 0, clickedRow < allActions.count else { return }
         let action = allActions[clickedRow]
         action.action?(action)
+    }
+}
+
+class TableView: NSTableView {
+    override func mouseDown(with event: NSEvent) {
+        super.mouseDown(with: event)
+        print(#function)
+    }
+    override func mouseUp(with event: NSEvent) {
+        super.mouseUp(with: event)
+        print(#function)
     }
 }
 

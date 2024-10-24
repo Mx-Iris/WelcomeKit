@@ -43,9 +43,21 @@ class AppDelegate: NSObject, NSApplicationDelegate, WelcomePanelDataSource {
         shadow.shadowOffset = .init(width: 0, height: 2)
         shadow.shadowColor = .init(red: 0.09, green: 0.42, blue: 0.88, alpha: 0.55)
         welcomeConfiguration.appIconImageShadow = shadow
-        welcomeConfiguration.primaryAction = .init(image: .symbol(systemName: .plusSquare, pointSize: 17, weight: .semibold), title: "Create New File...")
-        welcomeConfiguration.secondaryAction = .init(image: .symbol(systemName: .squareAndArrowDownOnSquare, pointSize: 17, weight: .semibold), title: "Clone Git Repository...")
-        welcomeConfiguration.tertiaryAction = .init(image: .symbol(systemName: .folder, pointSize: 17, weight: .semibold), title: "Open File or Folder...")
+        welcomeConfiguration.primaryAction = .init(
+            image: .symbol(systemName: .plusSquare, pointSize: 17, weight: .semibold),
+            title: "Create New File...",
+            action: { _ in print("primaryAction") }
+        )
+        welcomeConfiguration.secondaryAction = .init(
+            image: .symbol(systemName: .squareAndArrowDownOnSquare, pointSize: 17, weight: .semibold),
+            title: "Clone Git Repository...",
+            action: { _ in print("secondaryAction") }
+        )
+        welcomeConfiguration.tertiaryAction = .init(
+            image: .symbol(systemName: .folder, pointSize: 17, weight: .semibold),
+            title: "Open File or Folder...",
+            action: { _ in print("tertiaryAction") }
+        )
         return welcomeConfiguration
     }()
 
