@@ -1,20 +1,18 @@
 import AppKit
 
 class WelcomeActionCellView: TableCellView {
-    let iconImageView = NSImageView()
+    lazy var iconImageView = NSImageView()
 
-    let titleLabel = NSTextField(labelWithString: "")
+    lazy var titleLabel = NSTextField(labelWithString: "")
 
     lazy var detailLabel = NSTextField(labelWithString: "")
 
-    lazy var backgroundView = View()
-    
     let style: WelcomeStyle
-    
+
     init(style: WelcomeStyle) {
         self.style = style
         super.init(frame: .zero)
-        
+
         switch style {
         case .xcode14:
             addSubview(iconImageView)
@@ -27,39 +25,68 @@ class WelcomeActionCellView: TableCellView {
                 make.widthAnchor.constraint(equalToConstant: 35)
                 make.heightAnchor.constraint(equalToConstant: 35)
             }
-            
+
             titleLabel.makeConstraints { make in
                 make.leftAnchor.constraint(equalTo: iconImageView.rightAnchor, constant: 15)
                 make.topAnchor.constraint(equalTo: topAnchor, constant: 9)
+                make.rightAnchor.constraint(equalTo: rightAnchor)
             }
-            
+
             detailLabel.makeConstraints { make in
                 make.leftAnchor.constraint(equalTo: titleLabel.leftAnchor)
                 make.topAnchor.constraint(equalTo: titleLabel.bottomAnchor)
+                make.rightAnchor.constraint(equalTo: rightAnchor)
             }
-            
+
             iconImageView.do {
                 $0.contentTintColor = .controlAccentColor
             }
+
+            titleLabel.do {
+                $0.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+            }
+
+            detailLabel.do {
+                $0.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+            }
+
         case .xcode15:
-            addSubview(backgroundView, fill: true)
             addSubview(iconImageView)
             addSubview(titleLabel)
-            
-            backgroundView.cornerRadius = 8
-            backgroundView.backgroundColor = .labelColor.withAlphaComponent(0.03)
-            
+
+            cornerRadius = 8
+            backgroundColor = .labelColor.withAlphaComponent(0.03)
+
             iconImageView.makeConstraints { make in
                 make.leftAnchor.constraint(equalTo: leftAnchor, constant: 11.5)
                 make.centerYAnchor.constraint(equalTo: centerYAnchor)
                 make.widthAnchor.constraint(equalToConstant: 24)
 //                make.heightAnchor.constraint(equalToConstant: 24)
             }
-            
+
             titleLabel.makeConstraints { make in
                 make.leftAnchor.constraint(equalTo: iconImageView.rightAnchor, constant: 11)
                 make.centerYAnchor.constraint(equalTo: centerYAnchor)
+                make.rightAnchor.constraint(equalTo: rightAnchor)
             }
+
+            titleLabel.do {
+                $0.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+            }
+        }
+    }
+
+    override func mouseDown(with event: NSEvent) {
+//        super.mouseDown(with: event)
+        if style == .xcode15 {
+            backgroundColor = .labelColor.withAlphaComponent(0.05)
+        }
+    }
+
+    override func mouseUp(with event: NSEvent) {
+//        super.mouseUp(with: event)
+        if style == .xcode15 {
+            backgroundColor = .labelColor.withAlphaComponent(0.03)
         }
     }
 }

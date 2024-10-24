@@ -2,7 +2,7 @@ import AppKit
 
 class ProjectCellView: TableCellView {
     let style: WelcomeStyle
-    
+
     lazy var iconImageView = NSImageView()
 
     lazy var titleLabel: NSTextField = .init(labelWithString: "").then {
@@ -16,12 +16,14 @@ class ProjectCellView: TableCellView {
         $0.font = style.projectCellDetailLabelFont
         $0.maximumNumberOfLines = 1
         $0.textColor = .secondaryLabelColor
-        $0.lineBreakMode = .byTruncatingTail
+        $0.lineBreakMode = .byTruncatingHead
     }
 
     init(style: WelcomeStyle) {
         self.style = style
+
         super.init(frame: .zero)
+
         addSubview(iconImageView)
         addSubview(titleLabel)
         addSubview(detailLabel)

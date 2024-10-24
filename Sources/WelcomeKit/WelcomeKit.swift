@@ -26,6 +26,7 @@ class View: NSView {
     override init(frame frameRect: NSRect) {
         super.init(frame: frameRect)
         wantsLayer = true
+        layerContentsRedrawPolicy = .onSetNeedsDisplay
     }
 
     @available(*, unavailable)
@@ -52,8 +53,32 @@ class ViewController: NSViewController {
 }
 
 class TableCellView: NSTableCellView {
+    var backgroundColor: NSColor? {
+        didSet {
+            needsDisplay = true
+        }
+    }
+
+    var cornerRadius: CGFloat = 0 {
+        didSet {
+            needsDisplay = true
+        }
+    }
+
+    override var wantsUpdateLayer: Bool { true }
+
+    override func updateLayer() {
+        super.updateLayer()
+
+        layer?.backgroundColor = backgroundColor?.cgColor
+        layer?.cornerRadius = cornerRadius
+        layer?.masksToBounds = cornerRadius != 0
+    }
+
     override init(frame frameRect: NSRect) {
         super.init(frame: frameRect)
+        wantsLayer = true
+        layerContentsRedrawPolicy = .onSetNeedsDisplay
     }
 
     @available(*, unavailable)

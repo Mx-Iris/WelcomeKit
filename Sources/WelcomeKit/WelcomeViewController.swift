@@ -52,7 +52,7 @@ final class WelcomeViewController: ViewController {
         $0.state = .on
     }
 
-    lazy var closeButton: HoverButton = .init().then {
+    lazy var closeButton: HoverButton = .init(style: configuration.style).then {
         $0.hoveringImage = Bundle.module.image(forResource: "close_hover")
         $0.notHoveringImage = Bundle.module.image(forResource: "close")
         $0.target = self
