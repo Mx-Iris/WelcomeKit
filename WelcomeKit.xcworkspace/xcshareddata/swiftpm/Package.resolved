@@ -1,0 +1,14 @@
+{
+  "pins" : [
+    {
+      "identity" : "sfsymbol",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Mx-Iris/SFSymbol",
+      "state" : {
+        "branch" : "main",
+        "revision" : "e2636cd46ee750e640df2759d1d25afbca7c4fed"
+      }
+    }
+  ],
+  "version" : 2
+}

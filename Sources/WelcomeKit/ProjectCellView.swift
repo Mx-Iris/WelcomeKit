@@ -1,22 +1,27 @@
 import AppKit
 
 class ProjectCellView: TableCellView {
+    let style: WelcomeStyle
+    
     lazy var iconImageView = NSImageView()
 
     lazy var titleLabel: NSTextField = .init(labelWithString: "").then {
-        $0.font = .systemFont(ofSize: 13, weight: .regular)
+        $0.font = style.projectCellTitleLabelFont
         $0.maximumNumberOfLines = 1
         $0.textColor = .controlTextColor
+        $0.lineBreakMode = .byTruncatingTail
     }
 
     lazy var detailLabel: NSTextField = .init(labelWithString: "").then {
-        $0.font = .systemFont(ofSize: 11, weight: .regular)
+        $0.font = style.projectCellDetailLabelFont
         $0.maximumNumberOfLines = 1
         $0.textColor = .secondaryLabelColor
+        $0.lineBreakMode = .byTruncatingTail
     }
 
-    override init(frame frameRect: NSRect) {
-        super.init(frame: frameRect)
+    init(style: WelcomeStyle) {
+        self.style = style
+        super.init(frame: .zero)
         addSubview(iconImageView)
         addSubview(titleLabel)
         addSubview(detailLabel)

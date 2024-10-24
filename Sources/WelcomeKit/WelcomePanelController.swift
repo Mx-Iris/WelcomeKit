@@ -1,24 +1,22 @@
 import AppKit
-/* WelcomePanelDataSource */
+
 public protocol WelcomePanelDataSource: AnyObject {
     func welcomePanelUsesRecentDocumentURLs(_ welcomePanel: WelcomePanelController) -> Bool
     func numberOfProjects(in welcomePanel: WelcomePanelController) -> Int
     func welcomePanel(_ welcomePanel: WelcomePanelController, urlForProjectAtIndex index: Int) -> URL
 }
-/* WelcomePanelDelegate */
+
 public protocol WelcomePanelDelegate: AnyObject {
     func welcomePanel(_ welcomePanel: WelcomePanelController, didCheckShowPanelWhenLaunch isCheck: Bool)
     func welcomePanel(_ welcomePanel: WelcomePanelController, didSelectProjectAtIndex index: Int)
     func welcomePanel(_ welcomePanel: WelcomePanelController, didDoubleClickProjectAtIndex index: Int)
 }
-/* WelcomePanelController */
 
 final class WelcomeWindow: NSWindow {
     override var canBecomeKey: Bool {
         true
     }
 }
-
 
 public final class WelcomePanelController: NSWindowController {
     public weak var dataSource: WelcomePanelDataSource? {
@@ -41,7 +39,7 @@ public final class WelcomePanelController: NSWindowController {
 
     private lazy var welcomeViewController = WelcomeViewController(configuration: configuration)
 
-    private lazy var projectsViewController = ProjectsViewController()
+    private lazy var projectsViewController = ProjectsViewController(configuration: configuration)
 
     @available(*, unavailable)
     public override var window: NSWindow? {
@@ -53,6 +51,16 @@ public final class WelcomePanelController: NSWindowController {
         }
     }
     
+    @available(*, unavailable)
+    public override var contentViewController: NSViewController? {
+        set {
+            super.contentViewController = newValue
+        }
+        get {
+            super.contentViewController
+        }
+    }
+
     public init(configuration: WelcomeConfiguration = .init()) {
         self.configuration = configuration
         super.init(window: nil)
@@ -68,11 +76,11 @@ public final class WelcomePanelController: NSWindowController {
         super.windowDidLoad()
 
         contentWindow.styleMask = configuration.style.windowStyleMask
-        
+
         if configuration.style == .xcode15 {
             contentWindow.backgroundColor = .clear
         }
-        
+
         let contentViewController = ViewController().then {
             $0.contentView.frame = configuration.style.windowRect
             $0.contentView.cornerRadius = configuration.style.windowCornerRadius
@@ -85,7 +93,7 @@ public final class WelcomePanelController: NSWindowController {
             $0.addChild(projectsViewController)
         }
 
-        self.contentViewController = contentViewController
+        super.contentViewController = contentViewController
 
         welcomeViewController.view.makeConstraints { make in
             make.topAnchor.constraint(equalTo: contentViewController.view.topAnchor)
@@ -105,12 +113,12 @@ public final class WelcomePanelController: NSWindowController {
             guard let self else { return }
             delegate?.welcomePanel(self, didCheckShowPanelWhenLaunch: button.state == .on)
         }
-        
+
         projectsViewController.didSelect = { [weak self] index in
             guard let self else { return }
             delegate?.welcomePanel(self, didSelectProjectAtIndex: index)
         }
-        
+
         projectsViewController.didDoubleClick = { [weak self] index in
             guard let self else { return }
             delegate?.welcomePanel(self, didDoubleClickProjectAtIndex: index)
@@ -141,7 +149,7 @@ public final class WelcomePanelController: NSWindowController {
         welcomeViewController.reloadData()
         projectsViewController.reloadData()
     }
-    
+
     public override func showWindow(_ sender: Any?) {
         reloadData()
         super.showWindow(sender)

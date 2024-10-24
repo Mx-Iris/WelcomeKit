@@ -1,6 +1,13 @@
 import AppKit
 
 class ProjectsViewController: ViewController {
+    let configuration: WelcomeConfiguration
+    
+    init(configuration: WelcomeConfiguration) {
+        self.configuration = configuration
+        super.init()
+    }
+    
     var recentProjectURLs: [URL] = []
 
     var usesRecentDocumentURLs: Bool = true
@@ -79,7 +86,14 @@ extension ProjectsViewController: NSTableViewDataSource, NSTableViewDelegate {
     }
 
     func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
-        let cell = tableView.makeView(ofClass: ProjectCellView.self, owner: nil)
+        let cell: ProjectCellView
+        if let reuseView = tableView.makeView(withIdentifier: .init(String(describing: ProjectCellView.self)), owner: nil) as? ProjectCellView {
+            cell = reuseView
+        } else {
+            let cellView = ProjectCellView(style: configuration.style)
+            cellView.identifier = .init(String(describing: ProjectCellView.self))
+            cell = cellView
+        }
         let projectURL = urls[row]
         let properties = try? projectURL.resourceValues(forKeys: [.localizedNameKey, .effectiveIconKey])
         cell.iconImageView.image = properties?.effectiveIcon as? NSImage

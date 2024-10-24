@@ -96,6 +96,24 @@ public enum WelcomeStyle {
         }
     }
 
+    var projectCellTitleLabelFont: NSFont {
+        switch self {
+        case .xcode14:
+                .systemFont(ofSize: 13, weight: .regular)
+        case .xcode15:
+                .systemFont(ofSize: 13, weight: .semibold)
+        }
+    }
+    
+    var projectCellDetailLabelFont: NSFont {
+        switch self {
+        case .xcode14:
+                .systemFont(ofSize: 11, weight: .regular)
+        case .xcode15:
+                .systemFont(ofSize: 11, weight: .regular)
+        }
+    }
+    
     func welcomeLabelDefaultText(forName name: String) -> String {
         switch self {
         case .xcode14:
