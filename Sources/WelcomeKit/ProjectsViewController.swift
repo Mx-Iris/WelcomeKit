@@ -2,12 +2,12 @@ import AppKit
 
 class ProjectsViewController: ViewController {
     let configuration: WelcomeConfiguration
-    
+
     init(configuration: WelcomeConfiguration) {
         self.configuration = configuration
         super.init()
     }
-    
+
     var recentProjectURLs: [URL] = []
 
     var usesRecentDocumentURLs: Bool = true
@@ -24,9 +24,14 @@ class ProjectsViewController: ViewController {
         }
     }
 
-    lazy var scrollView: NSScrollView = .init().then {
+    lazy var visualEffectView = NSVisualEffectView().then {
+        $0.blendingMode = .behindWindow
+        $0.material = .underWindowBackground
+    }
+    
+    lazy var scrollView: ScrollView = .init().then {
         $0.documentView = tableView
-        $0.drawsBackground = false
+        $0.backgroundColor = configuration.style.projectViewBackgroundColor
         $0.automaticallyAdjustsContentInsets = false
     }
 
@@ -42,7 +47,7 @@ class ProjectsViewController: ViewController {
             $0.addItem(withTitle: "Show in Finder", action: #selector(showInFinderAction(_:)), keyEquivalent: "")
         }
     }
-    
+
     lazy var placeholderLabel = NSTextField(labelWithString: "No Recent Projects").then {
         $0.font = .systemFont(ofSize: 16.5)
         $0.textColor = .secondaryLabelColor
@@ -56,7 +61,8 @@ class ProjectsViewController: ViewController {
     }
 
     override func loadView() {
-        view = scrollView
+        view = visualEffectView
+        visualEffectView.addSubview(scrollView, fill: true)
     }
 
     override func viewDidLoad() {

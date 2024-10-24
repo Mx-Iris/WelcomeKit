@@ -97,3 +97,38 @@ class TrackView: View {
         addTrackingArea(newArea)
     }
 }
+
+final class ScrollView: NSScrollView {
+    override var wantsUpdateLayer: Bool { true }
+
+    override var backgroundColor: NSColor {
+        didSet {
+            needsDisplay = true
+        }
+    }
+    
+    override func updateLayer() {
+        super.updateLayer()
+        layer?.backgroundColor = backgroundColor.cgColor
+    }
+
+    override init(frame frameRect: NSRect) {
+        super.init(frame: frameRect)
+        wantsLayer = true
+        layerContentsRedrawPolicy = .onSetNeedsDisplay
+        backgroundColor = .clear
+        drawsBackground = false
+    }
+
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    override func didAddSubview(_ subview: NSView) {
+        if subview is NSVisualEffectView {
+            subview.removeFromSuperview()
+        }
+        super.didAddSubview(subview)
+    }
+}

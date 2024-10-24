@@ -8,15 +8,7 @@ extension NSAppearance {
     }
 }
 
-final class ScrollView: NSScrollView {
-    
-    override func didAddSubview(_ subview: NSView) {
-        if subview is NSVisualEffectView {
-            subview.removeFromSuperview()
-        }
-        super.didAddSubview(subview)
-    }
-}
+
 
 final class WelcomeViewController: ViewController {
     let configuration: WelcomeConfiguration
@@ -75,17 +67,11 @@ final class WelcomeViewController: ViewController {
     override func loadView() {
         switch configuration.style {
         case .xcode14:
-            contentView.backgroundColor = .windowBackgroundColor
+            contentView.backgroundColor = configuration.style.welcomeViewBackgroundColor
             self.view = contentView
         case .xcode15:
             self.view = visualEffectView
-            contentView.backgroundColor = NSColor.init(name: .init("\(Self.self)"), dynamicProvider: { appearance in
-                if appearance.isDark {
-                    return .black.withAlphaComponent(0.2)
-                } else {
-                    return .white
-                }
-            })
+            contentView.backgroundColor = configuration.style.welcomeViewBackgroundColor
             visualEffectView.addSubview(contentView, fill: true)
         }
     }

@@ -49,17 +49,26 @@ class AppDelegate: NSObject, NSApplicationDelegate, WelcomePanelDataSource {
         return welcomeConfiguration
     }()
 
+    lazy var xcode14WelcomePanelController: WelcomePanelController = {
+        let xcode14WelcomePanelController = WelcomePanelController(configuration: xcode14Configuration)
+        xcode14WelcomePanelController.showWindow(nil)
+        xcode14WelcomePanelController.dataSource = self
+        return xcode14WelcomePanelController
+    }()
+
+    lazy var xcode15WelcomePanelController: WelcomePanelController = {
+        let xcode15WelcomePanelController = WelcomePanelController(configuration: xcode15Configuration)
+        xcode15WelcomePanelController.showWindow(nil)
+        xcode15WelcomePanelController.dataSource = self
+        return xcode15WelcomePanelController
+    }()
+
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         if let urls = try? FileManager.default.contentsOfDirectory(at: URL.downloadsDirectory, includingPropertiesForKeys: nil).prefix(10) {
             downloadURLs = Array(urls)
         }
-        let xcode14WelcomePanelController = WelcomePanelController(configuration: xcode14Configuration)
         xcode14WelcomePanelController.showWindow(nil)
-        xcode14WelcomePanelController.dataSource = self
-        
-        let xcode15WelcomePanelController = WelcomePanelController(configuration: xcode15Configuration)
         xcode15WelcomePanelController.showWindow(nil)
-        xcode15WelcomePanelController.dataSource = self
     }
 
     func applicationWillTerminate(_ aNotification: Notification) {

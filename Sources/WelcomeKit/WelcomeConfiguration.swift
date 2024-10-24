@@ -78,6 +78,34 @@ public enum WelcomeStyle {
         }
     }
 
+    var welcomeViewBackgroundColor: NSColor {
+        NSColor(name: .init("WelcomeViewBackgroundColor")) { appearance in
+            switch self {
+            case .xcode14:
+                if appearance.isDark {
+                    return .windowBackgroundColor
+                } else {
+                    return .white
+                }
+            case .xcode15:
+                if appearance.isDark {
+                    return .black.withAlphaComponent(0.2)
+                } else {
+                    return .white
+                }
+            }
+        }
+    }
+
+    var projectViewBackgroundColor: NSColor {
+        switch self {
+        case .xcode14:
+            .clear
+        case .xcode15:
+            .init(name: "ProjectViewBackgroundColor") { $0.isDark ? .clear : .white.withAlphaComponent(0.6) }
+        }
+    }
+
     var welcomeLabelDefaultFont: NSFont {
         switch self {
         case .xcode14:
@@ -99,21 +127,21 @@ public enum WelcomeStyle {
     var projectCellTitleLabelFont: NSFont {
         switch self {
         case .xcode14:
-                .systemFont(ofSize: 13, weight: .regular)
+            .systemFont(ofSize: 13, weight: .regular)
         case .xcode15:
-                .systemFont(ofSize: 13, weight: .semibold)
+            .systemFont(ofSize: 13, weight: .semibold)
         }
     }
-    
+
     var projectCellDetailLabelFont: NSFont {
         switch self {
         case .xcode14:
-                .systemFont(ofSize: 11, weight: .regular)
+            .systemFont(ofSize: 11, weight: .regular)
         case .xcode15:
-                .systemFont(ofSize: 11, weight: .regular)
+            .systemFont(ofSize: 11, weight: .regular)
         }
     }
-    
+
     func welcomeLabelDefaultText(forName name: String) -> String {
         switch self {
         case .xcode14:

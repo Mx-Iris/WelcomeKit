@@ -9,6 +9,14 @@ class WelcomeActionCellView: TableCellView {
 
     let style: WelcomeStyle
 
+    let normalBackgroundColor = NSColor(name: "WelcomeActionCellView.normalBackgroundColor") {
+        $0.isDark ? .white.withAlphaComponent(0.03) : .black.withAlphaComponent(0.05)
+    }
+    
+    let highlightBackgroundColor = NSColor(name: "WelcomeActionCellView.highlightBackgroundColor") {
+        $0.isDark ? .white.withAlphaComponent(0.05) : .black.withAlphaComponent(0.08)
+    }
+    
     init(style: WelcomeStyle) {
         self.style = style
         super.init(frame: .zero)
@@ -55,13 +63,12 @@ class WelcomeActionCellView: TableCellView {
             addSubview(titleLabel)
 
             cornerRadius = 8
-            backgroundColor = .labelColor.withAlphaComponent(0.03)
+            backgroundColor = normalBackgroundColor
 
             iconImageView.makeConstraints { make in
                 make.leftAnchor.constraint(equalTo: leftAnchor, constant: 11.5)
                 make.centerYAnchor.constraint(equalTo: centerYAnchor)
                 make.widthAnchor.constraint(equalToConstant: 24)
-//                make.heightAnchor.constraint(equalToConstant: 24)
             }
 
             titleLabel.makeConstraints { make in
@@ -75,18 +82,16 @@ class WelcomeActionCellView: TableCellView {
             }
         }
     }
-
+    
     override func mouseDown(with event: NSEvent) {
-//        super.mouseDown(with: event)
         if style == .xcode15 {
-            backgroundColor = .labelColor.withAlphaComponent(0.05)
+            backgroundColor = highlightBackgroundColor
         }
     }
 
     override func mouseUp(with event: NSEvent) {
-//        super.mouseUp(with: event)
         if style == .xcode15 {
-            backgroundColor = .labelColor.withAlphaComponent(0.03)
+            backgroundColor = normalBackgroundColor
         }
     }
 }
