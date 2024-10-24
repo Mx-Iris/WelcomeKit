@@ -55,9 +55,9 @@ class ProjectsViewController: ViewController {
     }
 
     @objc func showInFinderAction(_ sender: NSMenuItem) {
-        let selectedRow = tableView.selectedRow
-        guard selectedRow >= 0, selectedRow < urls.count else { return }
-        NSWorkspace.shared.activateFileViewerSelecting([urls[selectedRow]])
+        let row = tableView.clickedRow
+        guard row >= 0, row < urls.count else { return }
+        NSWorkspace.shared.activateFileViewerSelecting([urls[row]])
     }
 
     override func loadView() {
