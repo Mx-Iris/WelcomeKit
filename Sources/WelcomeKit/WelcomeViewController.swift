@@ -22,7 +22,7 @@ final class WelcomeViewController: ViewController {
         $0.drawsBackground = false
     }
 
-    lazy var actionTableView: TableView = .init().then {
+    lazy var actionTableView: NSTableView = .init().then {
         $0.rowHeight = configuration.style.actionTableViewCellHeight
         $0.intercellSpacing = .init(width: 0, height: configuration.style.actionTableViewSpacing)
         $0.style = .plain
@@ -196,18 +196,6 @@ final class WelcomeViewController: ViewController {
 //        let action = allActions[clickedRow]
 //        action.action?(action)
 //    }
-}
-
-class TableView: NSTableView {
-    override func mouseDown(with event: NSEvent) {
-        super.mouseDown(with: event)
-        print(#function)
-    }
-
-    override func mouseUp(with event: NSEvent) {
-        super.mouseUp(with: event)
-        print(#function)
-    }
 }
 
 extension WelcomeViewController: NSTableViewDataSource, NSTableViewDelegate {
