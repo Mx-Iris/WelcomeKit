@@ -5,12 +5,13 @@ import AppKit
 public enum WelcomeStyle {
     case xcode14
     case xcode15
+    case xcode26
 
     var actionTableViewHeight: CGFloat {
         switch self {
         case .xcode14:
             138
-        case .xcode15:
+        case .xcode15, .xcode26:
             132
         }
     }
@@ -19,7 +20,7 @@ public enum WelcomeStyle {
         switch self {
         case .xcode14:
             46
-        case .xcode15:
+        case .xcode15, .xcode26:
             36
         }
     }
@@ -28,7 +29,7 @@ public enum WelcomeStyle {
         switch self {
         case .xcode14:
             0
-        case .xcode15:
+        case .xcode15, .xcode26:
             8
         }
     }
@@ -37,7 +38,7 @@ public enum WelcomeStyle {
         switch self {
         case .xcode14:
             [.titled, .fullSizeContentView]
-        case .xcode15:
+        case .xcode15, .xcode26:
             [.borderless]
         }
     }
@@ -46,7 +47,7 @@ public enum WelcomeStyle {
         switch self {
         case .xcode14:
             .init(x: 0, y: 0, width: 800, height: 460)
-        case .xcode15:
+        case .xcode15, .xcode26:
             .init(x: 0, y: 0, width: 740, height: 460)
         }
     }
@@ -55,7 +56,7 @@ public enum WelcomeStyle {
         switch self {
         case .xcode14:
             307
-        case .xcode15:
+        case .xcode15, .xcode26:
             280
         }
     }
@@ -64,7 +65,7 @@ public enum WelcomeStyle {
         switch self {
         case .xcode14:
             40
-        case .xcode15:
+        case .xcode15, .xcode26:
             52
         }
     }
@@ -73,7 +74,7 @@ public enum WelcomeStyle {
         switch self {
         case .xcode14:
             0
-        case .xcode15:
+        case .xcode15, .xcode26:
             8
         }
     }
@@ -87,7 +88,7 @@ public enum WelcomeStyle {
                 } else {
                     return .white
                 }
-            case .xcode15:
+            case .xcode15, .xcode26:
                 if appearance.isDark {
                     return .black.withAlphaComponent(0.2)
                 } else {
@@ -101,7 +102,7 @@ public enum WelcomeStyle {
         switch self {
         case .xcode14:
             .clear
-        case .xcode15:
+        case .xcode15, .xcode26:
             .init(name: "ProjectViewBackgroundColor") { $0.isDark ? .clear : .white.withAlphaComponent(0.6) }
         }
     }
@@ -110,7 +111,7 @@ public enum WelcomeStyle {
         switch self {
         case .xcode14:
             .systemFont(ofSize: 36, weight: .regular)
-        case .xcode15:
+        case .xcode15, .xcode26:
             .systemFont(ofSize: 30, weight: .bold)
         }
     }
@@ -119,7 +120,7 @@ public enum WelcomeStyle {
         switch self {
         case .xcode14:
             .systemFont(ofSize: 13, weight: .light)
-        case .xcode15:
+        case .xcode15, .xcode26:
             .systemFont(ofSize: 13)
         }
     }
@@ -128,7 +129,7 @@ public enum WelcomeStyle {
         switch self {
         case .xcode14:
             .systemFont(ofSize: 13, weight: .regular)
-        case .xcode15:
+        case .xcode15, .xcode26:
             .systemFont(ofSize: 13, weight: .semibold)
         }
     }
@@ -137,7 +138,7 @@ public enum WelcomeStyle {
         switch self {
         case .xcode14:
             .systemFont(ofSize: 11, weight: .regular)
-        case .xcode15:
+        case .xcode15, .xcode26:
             .systemFont(ofSize: 11, weight: .regular)
         }
     }
@@ -146,7 +147,7 @@ public enum WelcomeStyle {
         switch self {
         case .xcode14:
             "Welcome to \(name)"
-        case .xcode15:
+        case .xcode15, .xcode26:
             name
         }
     }

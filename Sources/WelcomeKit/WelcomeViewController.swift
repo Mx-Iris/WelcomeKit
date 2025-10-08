@@ -65,13 +65,12 @@ final class WelcomeViewController: ViewController {
     }
 
     override func loadView() {
+        contentView.backgroundColor = configuration.style.welcomeViewBackgroundColor
         switch configuration.style {
-        case .xcode14:
-            contentView.backgroundColor = configuration.style.welcomeViewBackgroundColor
+        case .xcode14, .xcode26:
             view = contentView
         case .xcode15:
             view = visualEffectView
-            contentView.backgroundColor = configuration.style.welcomeViewBackgroundColor
             visualEffectView.addSubview(contentView, fill: true)
         }
     }
@@ -84,7 +83,7 @@ final class WelcomeViewController: ViewController {
 
     var effectView: NSView {
         switch configuration.style {
-        case .xcode14:
+        case .xcode14, .xcode26:
             return view
         case .xcode15:
             return contentView
@@ -236,7 +235,7 @@ extension WelcomeViewController: NSTableViewDataSource, NSTableViewDelegate {
                 $0.textColor = action.subtitleColor ?? .labelColor
                 $0.font = action.subtitleFont ?? .systemFont(ofSize: 12, weight: .regular)
             }
-        case .xcode15:
+        case .xcode15, .xcode26:
             cell.titleLabel.do {
                 $0.stringValue = action.title ?? ""
                 $0.textColor = action.titleColor ?? .labelColor

@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		E9AFD1422CC964FA0068B811 /* SFSymbol in Frameworks */ = {isa = PBXBuildFile; productRef = E9AFD1412CC964FA0068B811 /* SFSymbol */; };
+		E9365D2E2E968AD8001A36EF /* SFSymbols in Frameworks */ = {isa = PBXBuildFile; productRef = E9365D2D2E968AD8001A36EF /* SFSymbols */; };
 		E9BB88D82CC91E29000FF471 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9BB88D72CC91E29000FF471 /* AppDelegate.swift */; };
 		E9BB88DA2CC91E2A000FF471 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E9BB88D92CC91E2A000FF471 /* Assets.xcassets */; };
 		E9BB88DD2CC91E2A000FF471 /* Base in Resources */ = {isa = PBXBuildFile; fileRef = E9BB88DC2CC91E2A000FF471 /* Base */; };
@@ -28,7 +28,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E9BB88E62CC91E36000FF471 /* WelcomeKit in Frameworks */,
-				E9AFD1422CC964FA0068B811 /* SFSymbol in Frameworks */,
+				E9365D2E2E968AD8001A36EF /* SFSymbols in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -88,7 +88,7 @@
 			name = Example;
 			packageProductDependencies = (
 				E9BB88E52CC91E36000FF471 /* WelcomeKit */,
-				E9AFD1412CC964FA0068B811 /* SFSymbol */,
+				E9365D2D2E968AD8001A36EF /* SFSymbols */,
 			);
 			productName = Example;
 			productReference = E9BB88D42CC91E29000FF471 /* Example.app */;
@@ -119,7 +119,7 @@
 			);
 			mainGroup = E9BB88CB2CC91E29000FF471;
 			packageReferences = (
-				E9AFD1402CC964FA0068B811 /* XCRemoteSwiftPackageReference "SFSymbol" */,
+				E9AFD1402CC964FA0068B811 /* XCRemoteSwiftPackageReference "SFSymbols" */,
 			);
 			productRefGroup = E9BB88D52CC91E29000FF471 /* Products */;
 			projectDirPath = "";
@@ -357,9 +357,9 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		E9AFD1402CC964FA0068B811 /* XCRemoteSwiftPackageReference "SFSymbol" */ = {
+		E9AFD1402CC964FA0068B811 /* XCRemoteSwiftPackageReference "SFSymbols" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/Mx-Iris/SFSymbol";
+			repositoryURL = "https://github.com/Mx-Iris/SFSymbols";
 			requirement = {
 				branch = main;
 				kind = branch;
@@ -368,10 +368,10 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		E9AFD1412CC964FA0068B811 /* SFSymbol */ = {
+		E9365D2D2E968AD8001A36EF /* SFSymbols */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = E9AFD1402CC964FA0068B811 /* XCRemoteSwiftPackageReference "SFSymbol" */;
-			productName = SFSymbol;
+			package = E9AFD1402CC964FA0068B811 /* XCRemoteSwiftPackageReference "SFSymbols" */;
+			productName = SFSymbols;
 		};
 		E9BB88E52CC91E36000FF471 /* WelcomeKit */ = {
 			isa = XCSwiftPackageProductDependency;

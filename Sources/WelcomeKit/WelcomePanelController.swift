@@ -29,7 +29,7 @@ public final class WelcomePanelController: NSWindowController {
 
     public let configuration: WelcomeConfiguration
 
-    private lazy var contentWindow = WelcomeWindow(contentRect: configuration.style.windowRect, styleMask: [.titled, .fullSizeContentView], backing: .buffered, defer: true).then {
+    private lazy var contentWindow = WelcomeWindow(contentRect: configuration.style.windowRect, styleMask: [], backing: .buffered, defer: true).then {
         $0.titlebarAppearsTransparent = true
         $0.titleVisibility = .hidden
         $0.center()
@@ -76,6 +76,12 @@ public final class WelcomePanelController: NSWindowController {
         super.windowDidLoad()
 
         contentWindow.styleMask = configuration.style.windowStyleMask
+        contentWindow.collectionBehavior = [.moveToActiveSpace]
+        contentWindow.isMovable = true
+        contentWindow.isMovableByWindowBackground = true
+        contentWindow.isReleasedWhenClosed = true
+        contentWindow.backgroundColor = .clear
+        contentWindow.hasShadow = true
 
         if configuration.style == .xcode15 {
             contentWindow.backgroundColor = .clear

@@ -60,7 +60,7 @@ class WelcomeActionCellView: TableCellView {
                 $0.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
             }
 
-        case .xcode15:
+        case .xcode15, .xcode26:
             addSubview(iconImageView)
             addSubview(titleLabel)
 
