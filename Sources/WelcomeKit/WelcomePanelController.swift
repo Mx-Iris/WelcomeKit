@@ -79,7 +79,6 @@ public final class WelcomePanelController: NSWindowController {
         contentWindow.collectionBehavior = [.moveToActiveSpace]
         contentWindow.isMovable = true
         contentWindow.isMovableByWindowBackground = true
-        contentWindow.isReleasedWhenClosed = true
         contentWindow.backgroundColor = .clear
         contentWindow.hasShadow = true
 
